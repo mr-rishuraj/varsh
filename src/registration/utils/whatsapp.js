@@ -1,6 +1,6 @@
 export function sendWhatsAppMessages(data) {
   // ✅ YOUR WhatsApp number (India)
-  const businessWhatsApp = "9131786701";
+  const businessWhatsApp = "919131786701";
 
   const messageToRestaurant = `🌿 *Welcome to VARSH - OilCycle!*
 
