@@ -91,7 +91,7 @@ export default function Footer({ navigateTo }) {
           <div>
             <h4 className="text-lg font-bold mb-4">Contact</h4>
             <div className="space-y-2 text-gray-400">
-              <p>Email: info@varsh.in</p>
+              <p>Email: varshgayatellene@gmail.com</p>
               <p>Phone: +91 9131786701</p>
               <p>Location: India</p>
             </div>
