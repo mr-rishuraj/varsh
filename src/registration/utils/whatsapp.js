@@ -1,61 +1,72 @@
-export function sendWhatsAppMessages(data) {
-  // ✅ YOUR WhatsApp number (India)
+// Backend API endpoint (Node.js/Express example)
+export async function sendWhatsAppMessages(data) {
   const businessWhatsApp = "919131786701";
+  
+  const safe = (v) => v || "Not provided";
+  
+  let restaurantPhone = safe(data.whatsappNumber).replace(/[^0-9]/g, "");
+  if (restaurantPhone.length === 10) {
+    restaurantPhone = "91" + restaurantPhone;
+  }
 
   const messageToRestaurant = `🌿 *Welcome to VARSH - OilCycle!*
 
-Thank you for registering with us, ${data.ownerName}!
+Thank you for registering with us, ${safe(data.ownerName)}!
 
-*Restaurant Details:*
-🍽️ ${data.restaurantName}
-📧 ${data.email}
-📞 ${data.phone}
-📍 ${data.address}, ${data.city}, ${data.state} - ${data.pincode}
+🍽️ ${safe(data.restaurantName)}
+📞 ${safe(data.phone)}
+📍 ${safe(data.address)}, ${safe(data.city)} - ${safe(data.pincode)}
 
-*UCO Collection Details:*
-🛢️ Estimated Quantity: ${data.oilQuantity} liters/month
-📅 Collection Frequency: ${data.collectionFrequency}
-⏰ Preferred Time: ${data.collectionTime || "Not specified"}
-
-Our team will contact you within 24 hours.
-
-— Team VARSH ♻️`;
+🛢️ ${safe(data.oilQuantity)} L/month
+📅 ${safe(data.collectionFrequency)}
+⏰ ${safe(data.collectionTime)}`;
 
   const messageToYou = `🔔 *New Restaurant Registration*
 
-🍽️ Restaurant: ${data.restaurantName}
-👤 Owner: ${data.ownerName}
-📞 Phone: ${data.phone}
-💬 WhatsApp: ${data.whatsappNumber}
-📧 Email: ${data.email}
+🍽️ ${safe(data.restaurantName)}
+👤 ${safe(data.ownerName)}
+📞 ${safe(data.phone)}
+💬 ${restaurantPhone}
 
-📍 Address:
-${data.address}
-${data.city}, ${data.state} - ${data.pincode}
+🛢️ ${safe(data.oilQuantity)} L/month`;
 
-🛢️ UCO Details:
-Quantity: ${data.oilQuantity} L/month
-Frequency: ${data.collectionFrequency}
-Time: ${data.collectionTime || "Not specified"}
+  try {
+    // Send message to restaurant
+    await sendWhatsAppAPI(restaurantPhone, messageToRestaurant);
+    
+    // Send message to your business number
+    await sendWhatsAppAPI(businessWhatsApp, messageToYou);
+    
+    return { success: true };
+  } catch (error) {
+    console.error("WhatsApp send error:", error);
+    return { success: false, error: error.message };
+  }
+}
 
-⚠️ Action: Contact restaurant within 24 hours`;
+async function sendWhatsAppAPI(phoneNumber, message) {
+  const WHATSAPP_API_URL = "https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages";
+  const ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 
-  // Clean restaurant WhatsApp number
-  const restaurantPhone = data.whatsappNumber.replace(/[^0-9]/g, "");
+  const response = await fetch(WHATSAPP_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      to: phoneNumber,
+      type: "text",
+      text: {
+        body: message
+      }
+    })
+  });
 
-  // WhatsApp URLs
-  const restaurantURL = `https://wa.me/${restaurantPhone}?text=${encodeURIComponent(
-    messageToRestaurant
-  )}`;
+  if (!response.ok) {
+    throw new Error(`WhatsApp API error: ${response.statusText}`);
+  }
 
-  const businessURL = `https://wa.me/${businessWhatsApp}?text=${encodeURIComponent(
-    messageToYou
-  )}`;
-
-  // Open WhatsApp chats
-  window.open(restaurantURL, "_blank");
-
-  setTimeout(() => {
-    window.open(businessURL, "_blank");
-  }, 800);
+  return await response.json();
 }
