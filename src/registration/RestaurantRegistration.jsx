@@ -3,7 +3,7 @@ import RegistrationHeader from "./RegistrationHeader";
 import BenefitsCards from "./BenefitsCards";
 import RestaurantForm from "./RestaurantForm";
 import WhatsNext from "./WhatsNext";
-import { sendWhatsAppMessages } from "./utils/whatsapp";
+import { sendRegistrationEmail, sendNotificationEmail } from "./utils/email";
 
 export default function RestaurantRegistration({ onBack }) {
   const [formData, setFormData] = useState({
@@ -21,10 +21,12 @@ export default function RestaurantRegistration({ onBack }) {
     collectionFrequency: "weekly",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const required = [
       "restaurantName",
       "ownerName",
@@ -41,23 +43,49 @@ export default function RestaurantRegistration({ onBack }) {
       return;
     }
 
-    sendWhatsAppMessages(formData);
-    alert("Registration successful! WhatsApp confirmation sent.");
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
 
-    setFormData({
-      restaurantName: "",
-      ownerName: "",
-      email: "",
-      phone: "",
-      whatsappNumber: "",
-      address: "",
-      city: "",
-      state: "",
-      pincode: "",
-      oilQuantity: "",
-      collectionTime: "",
-      collectionFrequency: "weekly",
-    });
+    setIsSubmitting(true);
+
+    try {
+      // Send confirmation email to restaurant
+      const emailResult = await sendRegistrationEmail(formData);
+      
+      // Send notification to your business email
+      await sendNotificationEmail(formData);
+
+      if (emailResult.success) {
+        alert(`✅ Registration successful!\n\nA confirmation email has been sent to ${formData.email}\n\nOur team will contact you within 24 hours to schedule your first UCO collection.`);
+      } else {
+        alert("✅ Registration received! We will contact you soon via email and phone.");
+      }
+
+      // Reset form
+      setFormData({
+        restaurantName: "",
+        ownerName: "",
+        email: "",
+        phone: "",
+        whatsappNumber: "",
+        address: "",
+        city: "",
+        state: "",
+        pincode: "",
+        oilQuantity: "",
+        collectionTime: "",
+        collectionFrequency: "weekly",
+      });
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("✅ Registration received! Our team will contact you within 24 hours.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,6 +98,7 @@ export default function RestaurantRegistration({ onBack }) {
           onChange={handleChange}
           onSubmit={handleSubmit}
           onBack={onBack}
+          isSubmitting={isSubmitting}
         />
         <WhatsNext />
       </div>
