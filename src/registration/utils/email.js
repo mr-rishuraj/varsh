@@ -1,16 +1,13 @@
 import emailjs from "@emailjs/browser";
 
-/* =========================
-   USER CONFIRMATION EMAIL
-   Template ID: template_wv4xkmm
-   ========================= */
+
 export async function sendRegistrationEmail(data) {
   try {
     const result = await emailjs.send(
-      "service_0i70jkq",          // ✅ Your Service ID
-      "template_wv4xkmm",         // ✅ USER confirmation template
+      "service_0i70jkq",          
+      "template_wv4xkmm",         
       {
-        to_email: data.email,    // 👈 USER email
+        to_email: data.email,    
         owner_name: data.ownerName,
         restaurant_name: data.restaurantName,
         phone: data.phone,
@@ -20,7 +17,7 @@ export async function sendRegistrationEmail(data) {
         collection_frequency: data.collectionFrequency,
         collection_time: data.collectionTime || "Not specified",
       },
-      "5I9yiA8bGTFJrnSjY"           // ⚠️ Replace with your EmailJS Public Key
+      "5I9yiA8bGTFJrnSjY"           
     );
 
     console.log("User confirmation email sent:", result.text);
@@ -32,17 +29,13 @@ export async function sendRegistrationEmail(data) {
   }
 }
 
-/* =========================
-   ADMIN NOTIFICATION EMAIL
-   Template ID: template_gqqcw6d
-   ========================= */
 export async function sendNotificationEmail(data) {
   try {
     const result = await emailjs.send(
-      "service_0i70jkq",          // ✅ Same Service ID
-      "template_gqqcw6d",         // ✅ ADMIN notification template
+      "service_0i70jkq",          
+      "template_gqqcw6d",         
       {
-        to_email: "varshgayatellene@gmail.com", // 👈 ADMIN email
+        to_email: "varshgayatellene@gmail.com", 
         restaurant_name: data.restaurantName,
         owner_name: data.ownerName,
         email: data.email,
@@ -53,7 +46,7 @@ export async function sendNotificationEmail(data) {
         collection_frequency: data.collectionFrequency,
         collection_time: data.collectionTime || "Not specified",
       },
-      "5I9yiA8bGTFJrnSjY"           // ⚠️ Replace with your EmailJS Public Key
+      "5I9yiA8bGTFJrnSjY"           
     );
 
     console.log("Admin notification email sent:", result.text);
