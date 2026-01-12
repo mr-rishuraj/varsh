@@ -1,11 +1,11 @@
-import { CheckCircle, MessageCircle } from "lucide-react";
+import { CheckCircle, Mail } from "lucide-react";
 
 export default function WhatsNext() {
   const steps = [
-    "Instant WhatsApp confirmation",
-    "Verification within 24 hours",
-    "Site visit & container setup",
-    "Start scheduled collection",
+    "You’ll receive a confirmation email after submitting the form",
+    "Our team will review your registration details within 24 hours",
+    "We’ll reach out via email to confirm pickup schedule and setup",
+    "UCO collection will begin as per the agreed plan",
   ];
 
   return (
@@ -20,8 +20,10 @@ export default function WhatsNext() {
       ))}
 
       <div className="flex items-start space-x-3 mt-4">
-        <MessageCircle className="h-6 w-6 text-green-600 mt-1" />
-        <p>All communication happens via WhatsApp</p>
+        <Mail className="h-6 w-6 text-green-600 mt-1" />
+        <p>
+          All updates and communication will be shared via email
+        </p>
       </div>
     </div>
   );
