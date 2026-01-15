@@ -10,7 +10,7 @@ export default function RegistrationHeader() {
       </h1>
 
       <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-        Free UCO collection • FSSAI compliant • WhatsApp updates
+        Free UCO collection • FSSAI compliant • WhatsApp And Email updates
       </p>
     </div>
   );

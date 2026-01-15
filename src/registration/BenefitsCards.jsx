@@ -14,7 +14,7 @@ export default function BenefitsCards() {
     },
     {
       icon: MessageCircle,
-      title: "WhatsApp Updates",
+      title: "WhatsApp & Email Updates",
       desc: "Instant confirmations & alerts",
     },
   ];

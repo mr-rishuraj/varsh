@@ -101,7 +101,7 @@ export default function Footer({ navigateTo }) {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
           <p>
-            &copy; 2024 VARSH. All rights reserved. Making India cleaner, one drop
+            &copy; 2026 VARSH. All rights reserved. Making India cleaner, one drop
             at a time.
           </p>
         </div>

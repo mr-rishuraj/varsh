@@ -22,7 +22,7 @@ export default function WhatsNext() {
       <div className="flex items-start space-x-3 mt-4">
         <Mail className="h-6 w-6 text-green-600 mt-1" />
         <p>
-          All updates and communication will be shared via email
+          All updates and communication will be shared via email and whatsapp
         </p>
       </div>
     </div>
